@@ -34,7 +34,7 @@ public class iCalDAVParser extends iCalParser {
 		} else if (start.value.compareTo("VEVENT")==0) {
 			ret = Event.parse(data);
 		} else {
-			System.err.println("unkown resource token: " + start.value);
+			System.err.println("unkown root resource token: '" + start.value + "'");
 		}
 		
 		return ret;

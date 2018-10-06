@@ -27,15 +27,17 @@ public abstract class iCalParser {
 		boolean   stop   = false;
 		
 		while ((r = data.read()) != -1 && !stop) {
-			// TODO check cr lr or lr
 			c = (char)r;
-			for (char s : stops) {
-				if (s == c) {
+			for (int ci=0;ci<stops.length;ci++) {
+				System.out.println("check: " + r + ":" + (int)stops[ci]);
+				if (stops[ci] == c) {
 					return new Token(line,r);
 				}
 			}
+			System.out.print(r + " ");
 			line += c;
-		}		
+		}
+		System.out.println();
 		return new Token(line,r);
 	}
 	
@@ -54,10 +56,10 @@ public abstract class iCalParser {
 		Param               p = new Param();
 		
 		while (true) {
-			step = readUntil(data, ",)=".toCharArray());
+			step = readUntil(data, ":;=".toCharArray());
 			// TODO check cr lr or lr
 			System.out.println("pstep: " + step.value + ":" + step.last);
-			if (step.last == '\n' || step.last=='=' || step.last==')' || step.last == ',') {
+			if (step.last == '\r' || step.last == '\n' || step.last=='=' || step.last==';' || step.last == ':') {
 				if (key) { 
 					p.key = step.value;
 				} else {
@@ -65,8 +67,8 @@ public abstract class iCalParser {
 					ret.add(p);
 					p = new Param();
 				}
-				if (step.last == '\n' || step.last == ')' || step.last == -1) {
-					if (step.last == ')') 
+				if (step.last == '\n' || step.last == '\r' || step.last == ':' || step.last == -1) {
+					if (step.last == ':' || step.last == '\r') 
 						data.read();
 					break;
 				} 	
@@ -88,21 +90,26 @@ public abstract class iCalParser {
 		ContentLine cline;
 		Token       step;
 
-		step  = readUntil(data, ":(\n".toCharArray());
+		step  = readUntil(data, ":;\r\n".toCharArray());
 		cline = new ContentLine(step.value);
 		
 		System.out.println("cl: " + step.value);
 		// check if line end
 		if (step.last == -1 || step.last == '\n')
 			return cline;
+		else if (step.last == '\r') {
+			data.read(); // skip \n byte
+		}
 		
 		// check if params
-		if (step.last == '(') {
+		if (step.last == ';') {
 			cline.params = parseLineParams(data);
 		} 
 		
-		Token val = readUntil(data, "\n".toCharArray());
+		Token val = readUntil(data, "\r\n".toCharArray());
 		cline.value = val.value;
+		if (val.last == '\r')
+			data.read();
 		
 		return cline;
 	}

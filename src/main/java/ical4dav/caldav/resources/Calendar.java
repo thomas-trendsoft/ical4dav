@@ -81,6 +81,9 @@ public class Calendar extends CalDAVResource {
 				if (step.value.compareTo("VEVENT")==0) {
 					Event e = Event.parse(data);
 					cal.childs.add(e);
+				} else if (step.value.compareTo("VTIMEZONE")==0) {
+					Timezone tz = Timezone.parse(data);
+					cal.timezones.put(String.valueOf(tz.getTzId()), tz);
 				} else {
 					throw new ParseException("unknown calendar resource: " + step.value,0);
 				}
