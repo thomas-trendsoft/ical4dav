@@ -32,7 +32,7 @@ public class Event extends CalDAVResource {
 	 * default constructor 
 	 */
 	public Event() {
-		
+		super("VEVENT");
 	}
 
 	/**

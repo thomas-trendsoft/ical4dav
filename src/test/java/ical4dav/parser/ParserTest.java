@@ -6,9 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import ical4dav.caldav.iCalDAVParser;
+import ical4dav.caldav.properties.UTCOffset;
 import ical4dav.caldav.resources.CalDAVResource;
 
 public class ParserTest {
@@ -26,5 +28,14 @@ public class ParserTest {
 				"VERSION:2.0\r\nEND:VCALENDAR\r\n";
 		CalDAVResource c = iCalDAVParser.parse(new ByteArrayInputStream(text.getBytes("utf-8")));
 		System.out.println(c);
+	}
+	
+	@Test
+	public void testUTCOffsetParse() {
+		String test = "+1345";
+		
+		UTCOffset off = new UTCOffset("TZOFFSETFROM", test);
+		
+		Assert.assertTrue("utf offset parsed wrong",off.getValue().compareTo(test)==0);
 	}
 }

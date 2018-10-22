@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
+import ical4dav.properties.Parameter;
+
 /**
  * base parse methods 
  * 
@@ -29,12 +31,10 @@ public abstract class iCalParser {
 		while ((r = data.read()) != -1 && !stop) {
 			c = (char)r;
 			for (int ci=0;ci<stops.length;ci++) {
-				System.out.println("check: " + r + ":" + (int)stops[ci]);
 				if (stops[ci] == c) {
 					return new Token(line,r);
 				}
 			}
-			System.out.print(r + " ");
 			line += c;
 		}
 		System.out.println();
@@ -48,12 +48,12 @@ public abstract class iCalParser {
 	 * @return
 	 * @throws IOException
 	 */
-	public static List<Param> parseLineParams(InputStream data) throws IOException {
+	public static List<Parameter> parseLineParams(InputStream data) throws IOException {
 		Token       step;
 		boolean     key  = true;
 		
-		LinkedList<Param> ret = new LinkedList<Param>();
-		Param               p = new Param();
+		LinkedList<Parameter> ret = new LinkedList<Parameter>();
+		Parameter               p = new Parameter();
 		
 		while (true) {
 			step = readUntil(data, ":;=".toCharArray());
@@ -65,10 +65,10 @@ public abstract class iCalParser {
 				} else {
 					p.value = step.value;
 					ret.add(p);
-					p = new Param();
+					p = new Parameter();
 				}
 				if (step.last == '\n' || step.last == '\r' || step.last == ':' || step.last == -1) {
-					if (step.last == ':' || step.last == '\r') 
+					if (step.last == '\r') 
 						data.read();
 					break;
 				} 	
@@ -93,7 +93,7 @@ public abstract class iCalParser {
 		step  = readUntil(data, ":;\r\n".toCharArray());
 		cline = new ContentLine(step.value);
 		
-		System.out.println("cl: " + step.value);
+		System.out.println("cls: " + step.value);
 		// check if line end
 		if (step.last == -1 || step.last == '\n')
 			return cline;

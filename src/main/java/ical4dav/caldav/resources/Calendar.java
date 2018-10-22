@@ -11,6 +11,7 @@ import ical4dav.caldav.iCalDAVParser;
 import ical4dav.parser.ContentLine;
 import ical4dav.parser.Property;
 import ical4dav.parser.TokenMap;
+import ical4dav.properties.StringProperty;
 
 /**
  * iCal calendar 
@@ -19,36 +20,14 @@ import ical4dav.parser.TokenMap;
  *
  */
 public class Calendar extends CalDAVResource {
-
-	/**
-	 * Product ID
-	 */
-	@Property
-	private String prodId;
 	
 	/**
-	 * Calendar version
-	 */
-	private String version;
-	
-	/**
-	 * main child entries
-	 */
-	private List<CalDAVResource> childs;
-	
-	/**
-	 * calendar timezone entries
-	 */
-	private HashMap<String,Timezone> timezones;
-	
-	/**
-	 * default constructor 
+	 * Defaultconstructor 
 	 */
 	public Calendar() {
-		childs    = new LinkedList<>();
-		timezones = new HashMap<>();
+		super("VCALENDAR");
 	}
-	
+
 	/**
 	 * parse a calendar object 
 	 * 
@@ -65,57 +44,38 @@ public class Calendar extends CalDAVResource {
 			Integer t = TokenMap.getTokenMap().get(step.name);
 			
 			if (t == null) {
-				throw new ParseException("unknown token: " + step.name,0);
+				throw new ParseException("unknown calendar token: " + step.name,0);
 			}
 			
 			switch (t) {
 			case TokenMap.PRODID:
-				cal.prodId = step.value;
+				cal.getProperties().add(new StringProperty("PRODID",step.value,step.params));
 				break;
 			case TokenMap.VERSION:
-				cal.version = step.value;
+				cal.getProperties().add(new StringProperty("VERSION", step.value,step.params));
 				break;
 			case TokenMap.UID:
 				cal.UID = step.value;
 			case TokenMap.BEGIN:
 				if (step.value.compareTo("VEVENT")==0) {
 					Event e = Event.parse(data);
-					cal.childs.add(e);
+					cal.getComponents().add(e);
 				} else if (step.value.compareTo("VTIMEZONE")==0) {
 					Timezone tz = Timezone.parse(data);
-					cal.timezones.put(String.valueOf(tz.getTzId()), tz);
+					cal.getComponents().add(tz);
 				} else {
-					throw new ParseException("unknown calendar resource: " + step.value,0);
+					throw new ParseException("unknown calendar resource: '" + step.value + "'",0);
 				}
 				break;
 			case TokenMap.END:
 				return cal;
+				default:
+					throw new ParseException("unimplemented calendar token: '" + step.name + "'", 0);
 			}
 		}
 		
 		return cal;
 	}
 	
-	@Override 
-	public String toString() {
-		StringBuffer buf = new StringBuffer();
-		
-		buf.append("BEGIN:VCALENDAR\r\n");
-		if (prodId != null)
-			buf.append("PRODID:" + prodId + "\r\n");
-		if (version != null)
-			buf.append("VERSION:" + version + "\r\n");
-		if (UID != null)
-			buf.append("UID:" + UID + "\r\n");
-		
-		// append child resource elements
-		for (CalDAVResource r : childs) {
-			buf.append(r.toString());
-		}
-		
-		buf.append("END:VCALENDAR\r\n");
-		
-		return buf.toString();
-	}
 	
 }

@@ -14,7 +14,7 @@ public class ContentLineTest {
 		String example = "BEGIN:VCALENDAR";
 		
 		ContentLine l = iCalParser.parseContentLine(new ByteArrayInputStream(example.getBytes("utf-8")));
-
+		
 		Assert.assertTrue(l.name != null && l.name.compareTo("BEGIN")==0);
 		Assert.assertTrue(l.value != null && l.value.compareTo("VCALENDAR")==0);
 		Assert.assertTrue(l.params.size() == 0);
@@ -22,7 +22,7 @@ public class ContentLineTest {
 
 	@Test
 	public void testContentLineParams() throws UnsupportedEncodingException, IOException {
-		String example = "BEGIN(test=\"testtest\",abc=123):VCALENDAR";
+		String example = "BEGIN;test=\"testtest\";abc=123:VCALENDAR";
 		
 		ContentLine l = iCalParser.parseContentLine(new ByteArrayInputStream(example.getBytes("utf-8")));
 

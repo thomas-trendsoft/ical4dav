@@ -32,6 +32,15 @@ public class TokenMap {
 	
 	public static final int RECURRENCE_ID = 10;
 	
+	public static final int TZID = 11;
+	
+	public static final int TZOFFSETFROM = 12;
+	
+	public static final int TZOFFSETTO = 13;
+	
+	public static final int TZNAME = 14;
+	
+	
 	private static HashMap<String,Integer> pmap = null;
 	
 	public static HashMap<String,Integer> getTokenMap() {
@@ -48,6 +57,10 @@ public class TokenMap {
 			pmap.put("DTEND", DTEND);
 			pmap.put("RRULE",RRULE);
 			pmap.put("RECURRENCE-ID", RECURRENCE_ID);
+			pmap.put("TZID",TZID);
+			pmap.put("TZOFFSETFROM", TZOFFSETFROM);
+			pmap.put("TZOFFSETTO", TZOFFSETTO);
+			pmap.put("TZNAME", TZNAME);
 		}
 		return pmap;
 	}

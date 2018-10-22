@@ -19,7 +19,7 @@ import ical4dav.parser.iCalParser;
  */
 public class iCalDAVParser extends iCalParser {
 
-	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
+	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
 	
 	public static CalDAVResource parse(InputStream data) throws IOException, ParseException {
 		CalDAVResource ret   = null;
