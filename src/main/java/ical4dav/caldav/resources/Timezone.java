@@ -41,9 +41,9 @@ public class Timezone extends CalDAVResource {
 				break;
 			case TokenMap.BEGIN:
 				System.out.println("sub tz res: " + step.value);
-				if (step.value.compareTo("DAYLIGHT")==0) {
+				if (step.value.compareTo("DAYLIGHT")==0 || step.value.compareTo("STANDARD")==0) {
 					// TODO check multi component of same name for the rfc may occur more than one
-					tz.getComponents().put("DAYLIGHT",TzProp.parse("DAYLIGHT",data));
+					tz.getComponents().put(step.value,TzProp.parse(step.value,data));
 				} else {
 					throw new ParseException("unimplemented timzone sub property: " + step,0);
 				}

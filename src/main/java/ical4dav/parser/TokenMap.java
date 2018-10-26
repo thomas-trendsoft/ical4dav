@@ -42,6 +42,9 @@ public class TokenMap {
 	
 	public static final int CREATED = 15;
 	
+	public static final int LAST_MODIFIED = 16;
+	
+	public static final int TRANSP = 17;
 	
 	private static HashMap<String,Integer> pmap = null;
 	
@@ -73,6 +76,8 @@ public class TokenMap {
 			pmap.put("TZOFFSETTO", TZOFFSETTO);
 			pmap.put("TZNAME", TZNAME);
 			pmap.put("CREATED", CREATED);
+			pmap.put("LAST-MODIFIED",LAST_MODIFIED);
+			pmap.put("TRANSP",TRANSP);
 			
 			tmap = new HashMap<Integer,String>();
 			for (String k : pmap.keySet()) {

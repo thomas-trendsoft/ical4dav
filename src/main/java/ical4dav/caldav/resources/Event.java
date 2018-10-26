@@ -7,6 +7,7 @@ import java.util.Date;
 
 import ical4dav.caldav.iCalDAVParser;
 import ical4dav.caldav.properties.RRule;
+import ical4dav.caldav.properties.Transparent;
 import ical4dav.parser.ContentLine;
 import ical4dav.parser.TokenMap;
 import ical4dav.properties.StringProperty;
@@ -66,7 +67,13 @@ public class Event extends CalDAVResource {
 				break;
 			case TokenMap.RRULE:
 				event.addMultiProperty(new RRule(TokenMap.RRULE, step.value, step.params));
-				break;				
+				break;	
+			case TokenMap.LAST_MODIFIED:
+				event.properties.put(TokenMap.LAST_MODIFIED, new Timestamp(TokenMap.LAST_MODIFIED,step.value,step.params));
+				break;
+			case TokenMap.TRANSP:
+				event.properties.put(TokenMap.TRANSP, new Transparent(TokenMap.TRANSP, step.value, step.params));
+				break;
 			case TokenMap.END:
 				return event;
 			}
