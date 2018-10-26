@@ -40,6 +40,7 @@ public class iCalComponent {
 		this.name = name;
 		this.properties = new HashMap<>();
 		this.components = new HashMap<>();
+		this.mproperties = new HashMap<>();
 	}
 
 	public HashMap<Integer,iCalProperty> getProperties() {

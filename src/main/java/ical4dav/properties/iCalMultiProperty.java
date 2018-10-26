@@ -1,5 +1,6 @@
 package ical4dav.properties;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -27,10 +28,16 @@ public class iCalMultiProperty {
 	 */
 	public iCalMultiProperty(Integer token) {
 		this.token = token;
+		
+		this.properties = new LinkedList<>();
 	}
 
 	public List<iCalProperty> getProperties() {
 		return properties;
+	}
+
+	public Integer getTokenId() {
+		return token;
 	}
 
 }
