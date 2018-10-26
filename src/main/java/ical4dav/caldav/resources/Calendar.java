@@ -3,13 +3,9 @@ package ical4dav.caldav.resources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 import ical4dav.caldav.iCalDAVParser;
 import ical4dav.parser.ContentLine;
-import ical4dav.parser.Property;
 import ical4dav.parser.TokenMap;
 import ical4dav.properties.StringProperty;
 
@@ -49,20 +45,20 @@ public class Calendar extends CalDAVResource {
 			
 			switch (t) {
 			case TokenMap.PRODID:
-				cal.getProperties().add(new StringProperty("PRODID",step.value,step.params));
+				cal.getProperties().put(TokenMap.PRODID,new StringProperty(TokenMap.PRODID,step.value,step.params));
 				break;
 			case TokenMap.VERSION:
-				cal.getProperties().add(new StringProperty("VERSION", step.value,step.params));
+				cal.getProperties().put(TokenMap.VERSION,new StringProperty(TokenMap.VERSION, step.value,step.params));
 				break;
 			case TokenMap.UID:
 				cal.UID = step.value;
 			case TokenMap.BEGIN:
 				if (step.value.compareTo("VEVENT")==0) {
 					Event e = Event.parse(data);
-					cal.getComponents().add(e);
+					cal.getComponents().put(e.getUID(), e);
 				} else if (step.value.compareTo("VTIMEZONE")==0) {
 					Timezone tz = Timezone.parse(data);
-					cal.getComponents().add(tz);
+					cal.getComponents().put(tz.UID, tz);
 				} else {
 					throw new ParseException("unknown calendar resource: '" + step.value + "'",0);
 				}

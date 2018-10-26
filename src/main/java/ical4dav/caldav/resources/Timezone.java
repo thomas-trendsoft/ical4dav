@@ -5,10 +5,10 @@ import java.io.InputStream;
 import java.text.ParseException;
 
 import ical4dav.caldav.iCalDAVParser;
-import ical4dav.caldav.properties.TimezoneID;
-import ical4dav.caldav.properties.TzProp;
+import ical4dav.caldav.properties.RRule;
 import ical4dav.parser.ContentLine;
 import ical4dav.parser.TokenMap;
+import ical4dav.properties.StringProperty;
 
 public class Timezone extends CalDAVResource {
 
@@ -37,12 +37,13 @@ public class Timezone extends CalDAVResource {
 			
 			switch (t) {
 			case TokenMap.TZID:
-				tz.getProperties().add(new TimezoneID(step.value));
+				tz.getProperties().put(TokenMap.TZID,new StringProperty(TokenMap.TZID, step.value, step.params));
 				break;
 			case TokenMap.BEGIN:
 				System.out.println("sub tz res: " + step.value);
 				if (step.value.compareTo("DAYLIGHT")==0) {
-					tz.getComponents().add(TzProp.parse("DAYLIGHT",data));
+					// TODO check multi component of same name for the rfc may occur more than one
+					tz.getComponents().put("DAYLIGHT",TzProp.parse("DAYLIGHT",data));
 				} else {
 					throw new ParseException("unimplemented timzone sub property: " + step,0);
 				}

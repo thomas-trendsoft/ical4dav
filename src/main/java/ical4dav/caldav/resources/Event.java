@@ -6,8 +6,11 @@ import java.text.ParseException;
 import java.util.Date;
 
 import ical4dav.caldav.iCalDAVParser;
+import ical4dav.caldav.properties.RRule;
 import ical4dav.parser.ContentLine;
 import ical4dav.parser.TokenMap;
+import ical4dav.properties.StringProperty;
+import ical4dav.properties.Timestamp;
 
 /**
  * calendar object event resource implementation
@@ -16,17 +19,6 @@ import ical4dav.parser.TokenMap;
  *
  */
 public class Event extends CalDAVResource {
-	
-	/**
-	 * event summary
-	 */
-	private String summary;
-	
-	private Date timestamp;
-	
-	private Date start;
-	
-	private Date end;
 	
 	/**
 	 * default constructor 
@@ -58,17 +50,23 @@ public class Event extends CalDAVResource {
 				event.UID = step.value;
 				break;
 			case TokenMap.SUMMARY:
-				event.summary = step.value;
+				event.properties.put(TokenMap.SUMMARY, new StringProperty(TokenMap.SUMMARY, step.value, step.params));
 				break;
 			case TokenMap.DTSTAMP:
-				event.timestamp = iCalDAVParser.dateFormat.parse(step.value);
+				event.properties.put(TokenMap.DTSTAMP,new StringProperty(TokenMap.DTSTAMP, step.value, step.params));
 				break;
 			case TokenMap.DTEND:
-				event.end = iCalDAVParser.dateFormat.parse(step.value);
+				event.properties.put(TokenMap.DTEND,new Timestamp(TokenMap.DTEND, step.value, step.params));
 				break;
 			case TokenMap.DTSTART:
-				event.start = iCalDAVParser.dateFormat.parse(step.value);
+				event.properties.put(TokenMap.DTSTART,new Timestamp(TokenMap.DTSTART,step.value,step.params));
 				break;
+			case TokenMap.CREATED:
+				event.properties.put(TokenMap.CREATED,new Timestamp(TokenMap.CREATED, step.value, step.params));
+				break;
+			case TokenMap.RRULE:
+				event.addMultiProperty(new RRule(TokenMap.RRULE, step.value, step.params));
+				break;				
 			case TokenMap.END:
 				return event;
 			}
@@ -77,54 +75,5 @@ public class Event extends CalDAVResource {
 		return event;
 	}
 	
-	public String getSummary() {
-		return summary;
-	}
-
-	public void setSummary(String summary) {
-		this.summary = summary;
-	}
-
-	public Date getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	public Date getStart() {
-		return start;
-	}
-
-	public void setStart(Date start) {
-		this.start = start;
-	}
-
-	public Date getEnd() {
-		return end;
-	}
-
-	public void setEnd(Date end) {
-		this.end = end;
-	}
-
-	@Override
-	public String toString() {
-		StringBuffer buf = new StringBuffer();
-		
-		buf.append("BEGIN:VEVENT\r\n");
-		if (summary != null)
-			buf.append("SUMMARY:" + summary + "\r\n");
-		if (timestamp != null)
-			buf.append("DTSTAMP:" + iCalDAVParser.dateFormat.format(timestamp) + "\r\n");
-		if (start != null)
-			buf.append("DTSTART:" + iCalDAVParser.dateFormat.format(start) + "\r\n");
-		if (end != null) 
-			buf.append("DTEND:" + iCalDAVParser.dateFormat.format(end) + "\r\n");
-		buf.append("END:VEVENT\r\n");
-		
-		return buf.toString();
-	}
 
 }

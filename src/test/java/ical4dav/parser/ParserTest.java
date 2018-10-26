@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import ical4dav.caldav.iCalDAVParser;
+import ical4dav.caldav.properties.RRule;
 import ical4dav.caldav.properties.UTCOffset;
 import ical4dav.caldav.resources.CalDAVResource;
 
@@ -34,8 +35,17 @@ public class ParserTest {
 	public void testUTCOffsetParse() {
 		String test = "+1345";
 		
-		UTCOffset off = new UTCOffset("TZOFFSETFROM", test);
+		UTCOffset off = new UTCOffset(TokenMap.TZOFFSETFROM, test);
 		
 		Assert.assertTrue("utf offset parsed wrong",off.getValue().compareTo(test)==0);
+	}
+	
+	@Test
+	public void testRRuleParse() throws ParseException {
+		String test = "FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3";
+		
+		RRule rule = new RRule(TokenMap.RRULE, test, null);
+		
+		
 	}
 }

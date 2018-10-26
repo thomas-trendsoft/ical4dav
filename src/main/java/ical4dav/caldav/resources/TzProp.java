@@ -1,17 +1,17 @@
-package ical4dav.caldav.properties;
+package ical4dav.caldav.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 
 import ical4dav.caldav.iCalDAVParser;
-import ical4dav.caldav.resources.Timezone;
+import ical4dav.caldav.properties.RRule;
+import ical4dav.caldav.properties.UTCOffset;
 import ical4dav.parser.ContentLine;
 import ical4dav.parser.TokenMap;
 import ical4dav.properties.StringProperty;
 import ical4dav.properties.Timestamp;
 import ical4dav.properties.iCalComponent;
-import ical4dav.properties.iCalProperty;
 
 /**
  * tzprop implementation 
@@ -43,21 +43,24 @@ public class TzProp extends iCalComponent {
 			
 			switch (t) {
 			case TokenMap.TZOFFSETFROM:
-				tp.getProperties().add(new UTCOffset("TZOFFSETFROM", step.value));
+				tp.getProperties().put(TokenMap.TZOFFSETFROM,new UTCOffset(TokenMap.TZOFFSETFROM, step.value));
 				break;
 			case TokenMap.TZOFFSETTO:
-				tp.getProperties().add(new UTCOffset("TZOFFSETTO", step.value));
+				tp.getProperties().put(TokenMap.TZOFFSETTO,new UTCOffset(TokenMap.TZOFFSETTO, step.value));
 				break;
 			case TokenMap.TZNAME:
-				tp.getProperties().add(new StringProperty("TZNAME", step.value,step.params));
+				tp.addMultiProperty(new StringProperty(TokenMap.TZNAME, step.value,step.params));
 				break;
 			case TokenMap.DTSTART:
-				tp.getProperties().add(new Timestamp("DTSTART",step.value,step.params));
+				tp.getProperties().put(TokenMap.DTSTART,new Timestamp(TokenMap.DTSTART,step.value,step.params));
 				break;
+			case TokenMap.RRULE:
+				tp.addMultiProperty(new RRule(TokenMap.RRULE,step.value,step.params));
+				break;				
 			case TokenMap.END:
 				return tp;
 				default:
-					throw new ParseException("unimplemented timezone property: " + step, 0);
+					throw new ParseException("unimplemented 1timezone property: " + step, 0);
 			}
 		}
 

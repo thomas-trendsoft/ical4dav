@@ -6,8 +6,8 @@ public class StringProperty extends iCalProperty {
 
 	private String value;
 	
-	public StringProperty(String name,String value,List<Parameter> params) {
-		super(name);
+	public StringProperty(Integer token,String value,List<Parameter> params) {
+		super(token);
 		this.value = value;
 		if (params != null) {
 			this.parameters.addAll(params);

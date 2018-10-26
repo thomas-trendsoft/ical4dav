@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
+import ical4dav.parser.TokenMap;
+
 /**
  * Base caldav property implementation
  * @author tkrieger
@@ -17,18 +19,22 @@ public abstract class iCalProperty {
 	protected List<Parameter> parameters;
 
 	/**
-	 * property name
+	 * property name token id
 	 */
-	private String name;
+	private Integer token;
 	
 	/**
 	 * default constructor 
 	 * 
 	 * @param name property name
 	 */
-	public iCalProperty(String name) {
-		this.name = name;
+	public iCalProperty(Integer tokenid) {
+		this.token = tokenid;
 		this.parameters = new LinkedList<>();
+	}
+	
+	public Integer getTokenId() {
+		return token;
 	}
 	
 	public List<Parameter> getParameters() {
@@ -41,8 +47,8 @@ public abstract class iCalProperty {
 	 * @param name property name
 	 * @param params property parameters
 	 */
-	public iCalProperty(String name,List<Parameter> params) {
-		this.name       = name;
+	public iCalProperty(Integer token,List<Parameter> params) {
+		this.token      = token;
 		this.parameters = params;
 	}
 	
@@ -52,7 +58,7 @@ public abstract class iCalProperty {
 	
 	@Override
 	public String toString() {
-		String out = name; 
+		String out = TokenMap.getStringMap().get(token); 
 		for (Parameter p : parameters) {
 			out += ";" + p.toString();
 		}

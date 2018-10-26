@@ -25,8 +25,8 @@ public class UTCOffset extends iCalProperty {
 	 * @param name
 	 * @param value
 	 */
-	public UTCOffset(String name,String value) {
-		super(name);
+	public UTCOffset(Integer token,String value) {
+		super(token);
 		parseValue(value);
 	}
 	

@@ -10,8 +10,8 @@ public class Timestamp extends iCalProperty {
 
 	private Date timestamp;
 	
-	public Timestamp(String name,String value,List<Parameter> params) throws ParseException {
-		super(name,params);
+	public Timestamp(Integer token,String value,List<Parameter> params) throws ParseException {
+		super(token,params);
 		this.setValue(value);
 	}
 

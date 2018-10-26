@@ -40,8 +40,19 @@ public class TokenMap {
 	
 	public static final int TZNAME = 14;
 	
+	public static final int CREATED = 15;
+	
 	
 	private static HashMap<String,Integer> pmap = null;
+	
+	private static HashMap<Integer,String> tmap = null;
+	
+	public static HashMap<Integer,String> getStringMap() {
+		if (pmap == null) {
+			getTokenMap();
+		}
+		return tmap;
+	}
 	
 	public static HashMap<String,Integer> getTokenMap() {
 		if (pmap == null) {
@@ -61,6 +72,12 @@ public class TokenMap {
 			pmap.put("TZOFFSETFROM", TZOFFSETFROM);
 			pmap.put("TZOFFSETTO", TZOFFSETTO);
 			pmap.put("TZNAME", TZNAME);
+			pmap.put("CREATED", CREATED);
+			
+			tmap = new HashMap<Integer,String>();
+			for (String k : pmap.keySet()) {
+				tmap.put(pmap.get(k), k);
+			}
 		}
 		return pmap;
 	}
