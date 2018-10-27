@@ -28,6 +28,10 @@ public class Calendar extends CalDAVResource {
 		super("VCALENDAR");
 	}
 	
+	public void setTimezone(Timezone tz) {
+		this.components.put("VTIMEZONE", tz);
+	}
+	
 	public String toString(List<iCalComponent> comps) {
 		StringBuffer buf = new StringBuffer();
 		

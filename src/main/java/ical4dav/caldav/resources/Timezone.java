@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.text.ParseException;
 
 import ical4dav.caldav.iCalDAVParser;
-import ical4dav.caldav.properties.RRule;
 import ical4dav.parser.ContentLine;
 import ical4dav.parser.TokenMap;
 import ical4dav.properties.StringProperty;
@@ -14,6 +13,10 @@ public class Timezone extends CalDAVResource {
 
 	public Timezone() {
 		super("VTIMEZONE");
+	}
+	
+	public void setTzId(StringProperty tzid) {
+		this.properties.put(TokenMap.TZID, tzid);
 	}
 
 	/**
