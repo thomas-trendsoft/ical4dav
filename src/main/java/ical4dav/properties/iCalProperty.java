@@ -60,7 +60,7 @@ public abstract class iCalProperty {
 	public String toString() {
 		String out = TokenMap.getStringMap().get(token); 
 		for (Parameter p : parameters) {
-			out += ";" + p.toString();
+			out += ";" + p.key + "=" + p.value;
 		}
 		out += ":" + getValue();
 		return out;

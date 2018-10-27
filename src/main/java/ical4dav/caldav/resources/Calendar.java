@@ -3,11 +3,15 @@ package ical4dav.caldav.resources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
+import java.util.List;
 
 import ical4dav.caldav.iCalDAVParser;
 import ical4dav.parser.ContentLine;
 import ical4dav.parser.TokenMap;
 import ical4dav.properties.StringProperty;
+import ical4dav.properties.iCalComponent;
+import ical4dav.properties.iCalMultiProperty;
+import ical4dav.properties.iCalProperty;
 
 /**
  * iCal calendar 
@@ -22,6 +26,31 @@ public class Calendar extends CalDAVResource {
 	 */
 	public Calendar() {
 		super("VCALENDAR");
+	}
+	
+	public String toString(List<iCalComponent> comps) {
+		StringBuffer buf = new StringBuffer();
+		
+		buf.append("BEGIN:" + name + "\r\n");
+		
+		for (iCalProperty p : properties.values()) {
+			buf.append(p.toString() + "\r\n");
+		}
+		
+		for (iCalComponent c : comps) {
+			buf.append(c.toString());
+		}
+		
+		for (iCalMultiProperty m : mproperties.values()) {
+			for (iCalProperty p : m.getProperties()) {
+				buf.append(p.toString());
+			}
+		}
+		
+		buf.append("END:" + name + "\r\n");
+		
+		return buf.toString();
+		
 	}
 
 	/**
