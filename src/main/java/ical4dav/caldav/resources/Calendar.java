@@ -26,6 +26,12 @@ public class Calendar extends CalDAVResource {
 	 */
 	public Calendar() {
 		super("VCALENDAR");
+		
+		this.getProperties().put(TokenMap.VERSION, new StringProperty(TokenMap.VERSION, "2.0", null));
+	}
+	
+	public void setProdID(String value) {
+		getProperties().put(TokenMap.PRODID, new StringProperty(TokenMap.PRODID, value,null));
 	}
 	
 	public void setTimezone(Timezone tz) {

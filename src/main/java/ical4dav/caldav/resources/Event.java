@@ -3,7 +3,6 @@ package ical4dav.caldav.resources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
-import java.util.Date;
 
 import ical4dav.caldav.iCalDAVParser;
 import ical4dav.caldav.properties.RRule;
